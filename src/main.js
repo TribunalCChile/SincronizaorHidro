@@ -1,0 +1,38 @@
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+
+import CoreuiVue from '@coreui/vue'
+import CIcon from '@coreui/icons-vue'
+import { iconsSet as icons } from '@/assets/icons'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { 
+    faPhone, 
+    faClipboard,
+    faPenToSquare,
+
+} from '@fortawesome/free-solid-svg-icons'
+import DocsExample from '@/components/DocsExample'
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faPhone);
+library.add(faClipboard);
+library.add(faPenToSquare);
+
+const app = createApp(App)
+app.use(store)
+app.use(router)
+app.use(CoreuiVue)
+app.provide('icons', icons)
+app.component('CIcon', CIcon)
+app.component('DocsExample', DocsExample)
+app.component('VueDatePicker', VueDatePicker);
+app.component('v-select', vSelect); 
+app.component('font-awesome-icon', FontAwesomeIcon); 
+
+app.mount('#app')
