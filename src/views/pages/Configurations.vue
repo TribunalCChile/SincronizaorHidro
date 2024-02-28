@@ -1,7 +1,7 @@
 <template>
     <CRow class="mb-4">
         <CCol class="col-3 mt-4">
-            <CButton @click="addConfig">
+            <CButton @click="addConfig" color="success" shape="rounded-pill" variant="outline">
                 <CIcon :icon="icon.cilPlus" size="xl"/>
             </CButton>
         </CCol>

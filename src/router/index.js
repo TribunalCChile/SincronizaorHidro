@@ -81,6 +81,13 @@ const routes = [
         name: 'SyncStatus',
         component: () => import('@/views/pages/SyncStatus.vue'),
       },
+
+      {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import('@/views/pages/Profile.vue'),
+      },
+
       {
         path: '/base',
         name: 'Base',

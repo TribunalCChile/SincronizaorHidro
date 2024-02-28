@@ -67,10 +67,12 @@ const AppSidebarNav = defineComponent({
           },
           {
             togglerContent: () => [
-              h(resolveComponent('font-awesome-icon'), {
+              h(resolveComponent('CIcon'), {
                 customClassName: 'nav-icon',
-                name: ['fas', item.icon],
+                name: item.icon,
               }),
+              item.name,
+              h('font-awesome-icon', { icon: `fa-light ${item.icon}` }), // Renderizar el icono de Font Awesome
               item.name,
             ],
             default: () => item.items.map((child) => renderItem(child)),
@@ -98,10 +100,11 @@ const AppSidebarNav = defineComponent({
                   {
                     default: () => [
                       item.icon
-                        ? h(resolveComponent('font-awesome-icon'), {
-                            customClassName: 'nav-icon',
-                            name: ['fas', item.icon],
-                          })
+                        ? h(resolveComponent('CIcon'), {
+                          customClassName: 'nav-icon',
+                          name: item.icon,
+                        }) 
+                        /* h('font-awesome-icon', { icon: `fa-light ${item.icon}` }) */
                         : h('span', { class: 'nav-icon' }, h('span', { class: 'nav-icon-bullet' })),
                       item.name,
                       item.badge &&

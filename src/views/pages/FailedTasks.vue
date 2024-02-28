@@ -27,7 +27,7 @@
 
     </CRow>
 
-    <CTable class="mt-4">
+    <CTable class="mt-4" striped bordered>
         <CTableHead>
             <CTableRow>
                 <CTableHeaderCell scope="col">Cliente</CTableHeaderCell>
@@ -108,7 +108,7 @@
             }, 
             handleDevices(options) {
                 this.devicesFilter = options; 
-                console.log(options); 
+                console.log("DEVICES: ",options); 
             }, 
 
             handleDevices(devices) {
@@ -135,7 +135,7 @@
             async getDevicesByClients() { 
                 try {
                     let devices = []; 
-                    console.log("EN TRY: ",this.$store.state.token)
+                    
                     for (const client_id of this.clientsFilter) {
                         const response = await axios.get(
                             this.$store.state.backendUrl + "/devices",
@@ -158,7 +158,7 @@
 
                     this.devicesFilter = devices; 
                 } catch (error) {
-                    console.log("EN CATCH: ", this.$store.state.token); 
+                    
                     console.error('Error en la solicitud a la API:', error);
                     this.ShowError = true;
                 }

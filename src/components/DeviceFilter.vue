@@ -5,8 +5,9 @@
         v-model="selectedDevices" 
         :options="devices"
         @option:selected="filter" 
+        
         :reduce="device => device.id"
-        label="host"
+        label="zeusName"
         placeholder="Seleccione..."
     />
 </template>
@@ -33,8 +34,8 @@
 
         methods: {
             filter(e) {
-                console.log(this.selectedDevices);
-                this.$emit('filter', this.selectedDevices);
+                console.log(e)
+                this.$emit('filter', e);
             }
         }
     }

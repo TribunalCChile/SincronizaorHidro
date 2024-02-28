@@ -1,7 +1,9 @@
 <template>
+    
+    
     <CRow class="mb-4">
         <CCol class="col-3 mt-4">
-            <CButton @click="addClient">
+            <CButton @click="addClient" color="success" shape="rounded-pill" variant="outline">
                 <CIcon :icon="icon.cilPlus" size="xl"/>
             </CButton>
         </CCol>
@@ -75,8 +77,8 @@
                 let filterClients = this.clients; 
 
                 if (this.searchFilter !== '') {
-                    filterClients = filterClients.filter(clients => 
-                        clients.name.toLowerCase().includes(this.searchFilter)
+                    filterClients = filterClients.filter(client => 
+                        client.name.toLowerCase().includes(this.searchFilter.toLowerCase())
                     );
                 }
 

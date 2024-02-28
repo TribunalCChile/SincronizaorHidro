@@ -1,7 +1,7 @@
 <template>
     <CRow class="mb-4">
         <CCol class="col-3 mt-4">
-            <CButton @click="addDevice">
+            <CButton @click="addDevice" color="success" shape="rounded-pill" variant="outline">
                 <CIcon :icon="icon.cilPlus" size="xl"/>
                 
             </CButton>
@@ -79,6 +79,7 @@
                 showAddModal: false,
                 showEditModal: false, 
                 device_id: null,
+                
             }
             
         },
@@ -133,7 +134,7 @@
                     );
                     
                     this.devices = response.data;
-                    console.log(this.devices)
+                    console.log("DEVICES: ",this.devices)
 
                 } catch (error) {
                     console.error('Error en la solicitud a la API:', error);

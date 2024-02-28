@@ -3,7 +3,7 @@ export default [
     component: 'CNavItem',
     name: 'Dashboard',
     to: '/dashboard',
-    icon: 'cil-speedometer',
+    icon: 'pen-to-square',
     badge: {
       color: 'primary',
       text: 'NEW',
@@ -23,13 +23,13 @@ export default [
     component: 'CNavItem',
     name: 'Crear tareas',
     to: '/create-task',
-    icon: 'cil-note-add',
+    icon: 'cil-plus',
   },
   {
     component: 'CNavItem',
     name: 'Tareas en cola',
     to: '/task-queue',
-    icon: 'pen-to-square',
+    icon: 'cil-calendar',
   },
   {
     component: 'CNavItem',
@@ -47,21 +47,21 @@ export default [
     component: 'CNavItem',
     name: 'Clientes',
     to: '/clients',
-    icon: 'icon.cil-group',
+    icon: 'cil-group',
   },
   
   {
     component: 'CNavItem',
     name: 'Configuraciones',
     to: '/client-configs',
-    icon: 'cil-pencil',
+    icon: 'cil-puzzle',
   },
   
   {
     component: 'CNavItem',
     name: 'Dispositivos',
     to: '/devices',
-    icon: 'cil-rss',
+    icon: 'cil-audio',
   },
   
   

@@ -123,7 +123,9 @@
                     dgaUsername: '',
                     dgaPassword: ''
                 },
-                configs: []
+                configs: [],
+                success: false,
+                successMsg: ''
                 
             }
         },

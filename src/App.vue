@@ -5,7 +5,7 @@
 import { onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import { useColorModes } from '@coreui/vue'
-
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 export default {
   setup() {
     const { isColorModeSet, setColorMode } = useColorModes(

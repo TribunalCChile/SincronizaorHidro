@@ -11,11 +11,16 @@
         Perfil
       </CDropdownHeader>
       <CDropdownItem>
-        <CIcon icon="cil-user" /> Mi Perfil
+        <CButton @click="toProfile">
+          <CIcon icon="cil-user" /> Mi Perfil
+        </CButton>
+        
       </CDropdownItem>
       
-      <CDropdownItem @click="logout()">
-        <CIcon icon="cil-lock-locked" /> Cerrar sesión
+      <CDropdownItem >
+        <CButton @click="logout()">
+          <CIcon icon="cil-lock-locked" /> Cerrar sesión
+        </CButton>
       </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
@@ -23,8 +28,12 @@
 
 <script>
 import avatar from '@/assets/images/avatars/10.jpg'
+import Profile from '../views/pages/Profile.vue'; 
 export default {
   name: 'AppHeaderDropdownAccnt',
+  components: {
+    Profile
+  },
   setup() {
     return {
       avatar: avatar,
@@ -36,6 +45,10 @@ export default {
       this.$store.commit('logOut')
       this.$router.push('/pages/login')
     },
+
+    toProfile() {
+      this.$router.push('/profile'); 
+    }
   }
 }
 </script>
