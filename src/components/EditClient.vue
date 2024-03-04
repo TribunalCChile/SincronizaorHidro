@@ -40,7 +40,9 @@
     <DeleteModal 
         :showDeleteModal="showDeleteModal"
     >
-        <template></template>
+        <template v-slot:modalTitle>Eliminar Cliente</template>
+        <template v-slot:modalBody><b>ADVERTENCIA: Todos los datos del cliente serán eliminados.</b></template>
+        <template v-slot:modalFooter></template>
     </DeleteModal> 
 </template>
 
