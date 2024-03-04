@@ -9,6 +9,13 @@
                 {{ successMsg }}
             </CAlert>
             <CForm>
+                <CRow class="justify-content-end">
+                    <CCol class="">
+                        <CButton @click="deleteClient" color="danger"  variant="outline" >
+                            <CIcon :icon="icon.cilTrash" size="lg"/>
+                        </CButton>
+                    </CCol>
+                </CRow>
                 <CFormInput
                     type="text"
                     placeholder="Nombre"
@@ -17,6 +24,7 @@
                     @input="setTouched('name')"
                     feedback="Rellene este campo por favor."
                     :invalid="v$.form.name.$error"
+                    class="mt-3"
 
                 />
             </CForm>
@@ -28,12 +36,21 @@
             <CButton color="primary" @click="saveClient">Guardar</CButton>
         </CModalFooter>
     </CModal>
+
+    <DeleteModal 
+        :showDeleteModal="showDeleteModal"
+    >
+        <template></template>
+    </DeleteModal> 
 </template>
 
 <script>
     import axios from 'axios';
     import useVuelidate from '@vuelidate/core'
     import { required } from '@vuelidate/validators'
+    import { CIcon } from '@coreui/icons-vue';
+    import * as icon from '@coreui/icons';
+    import DeleteModal from './DeleteModal'; 
 
     export default {
         name: 'EditUser',
@@ -41,8 +58,12 @@
             showModal: Boolean,
             client: Object
         },
+        components: {
+            CIcon,
+            DeleteModal
+        },
         setup() {
-            return { v$: useVuelidate() }
+            return { v$: useVuelidate(), icon }
         },
         validations() {
             return {
@@ -59,6 +80,7 @@
                     id: '',
                     name: '',
                 },
+                showDeleteModal: false,
                 success: false,
                 successMsg: ''
                 
@@ -126,6 +148,28 @@
                     })
                 }
                 
+            },
+
+            deleteClient() {
+                this.showDeleteModal = true; 
+                /* const deletedClient = this.client; 
+                axios.delete(
+                    this.$store.state.backendUrl + '/clients/' + deletedClient.id,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + this.$store.state.token,
+                        }
+                    }
+                )
+                .then((res) => {
+                        console.log(res.data); 
+                        //this.successMsg = "Cliente eliminado exitósamente."; 
+                        //this.success = true; 
+                })
+                .catch((error) =>  {
+                    console.log("Error en post: ", error); 
+                }) */
             }
         }
 
