@@ -24,6 +24,9 @@
                             :reduce="config => config.client_id"
                             label="clientName"
                             placeholder="Seleccione..."
+                            @input="setTouched('client_id')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.client_id.$error"
                             
                         />
                             
@@ -35,6 +38,9 @@
                             :reduce="config => config.id"
                             placeholder="Seleccione..."
                             label="zeusHost" 
+                            @input="setTouched('client_config_id')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.client_config_id.$error"
                         />
                     </CCol>
                     <CCol class="col-6 mt-4">
@@ -44,6 +50,9 @@
                             :reduce="schedule => schedule.id"
                             label="name"
                             placeholder="Seleccione..."
+                            @input="setTouched('schedule_id')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.schedule_id.$error"
                         />
                     </CCol>
                     <CCol class="col-12 mt-4">
@@ -53,6 +62,9 @@
                             placeholder="Nombre"
                             aria-describedby="nombre"
                             v-model="form.zeusName"
+                            @input="setTouched('zeusName')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.zeusName.$error"
                         />
                     </CCol>
                     <CCol class="col-6 mt-4">
@@ -62,6 +74,10 @@
                             placeholder="Zeus código"
                             aria-describedby="Zeus código"
                             v-model="form.zeusCode"
+                            @input="setTouched('zeusCode')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.zeusCode.$error"
+                            
                         />
                     </CCol>
                     <CCol class="col-6 mt-4">
@@ -71,6 +87,9 @@
                             placeholder="DGA código"
                             aria-describedby="DGA código"
                             v-model="form.dgaCode"
+                            @input="setTouched('dgaCode')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.dgaCode.$error"
                         />
                     </CCol>
                     <CCol class="col-4 mt-4">
@@ -80,6 +99,7 @@
                             placeholder="Canal: Nivel Freático"
                             aria-describedby="Nivel Freático"
                             v-model="form.channelNivelFreatico"
+                            
                         />
                     </CCol>
                     <CCol class="col-4 mt-4">
@@ -89,6 +109,10 @@
                             placeholder="Canal: Caudal"
                             aria-describedby="Caudal"
                             v-model="form.channelCaudal"
+                            @input="setTouched('channelCaudal')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.channelCaudal.$error"
+                            
                         />
                     </CCol>
                     <CCol class="col-4 mt-4">
@@ -98,6 +122,9 @@
                             placeholder="Canal: Totalizador"
                             aria-describedby="Totalizador"
                             v-model="form.channelTotalizador"
+                            @input="setTouched('channelTotalizador')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.channelTotalizador.$error"
                         />
                     </CCol>
                     <CCol class="col-4 mt-4">
@@ -107,6 +134,9 @@
                             placeholder="Canal: Altura limnimétrica"
                             aria-describedby="limnimetrica"
                             v-model="form.channelAlturaLimnimetrica"
+                            @input="setTouched('channelAlturaLimnimetrica')"
+                            feedback="Rellene este campo por favor."
+                            :invalid="v$.form.channelAlturaLimnimetrica.$error"
                         />
                     </CCol>
                 </CRow>
@@ -124,11 +154,16 @@
 
 <script>
     import axios from 'axios';
+    import useVuelidate from '@vuelidate/core';
+    import { required, integer, minValue } from '@vuelidate/validators';
     export default {
         name: 'AddConfig',
         props: {
             showModal: Boolean,
             device: Object,
+        },
+        setup() {
+            return { v$: useVuelidate() }
         },
         data() {
             return {
@@ -151,6 +186,41 @@
                 successMsg: '', 
                 success: false,
                 
+            }
+        },
+        validations() {
+            return {
+                form: {
+                    client_id:{
+                        required
+                    },
+                    client_config_id: {
+                        required
+                    },
+                    schedule_id: {
+                        required
+                    },
+                    zeusName: {
+                        required
+                    },
+                    zeusCode: {
+                        required
+                    },
+                    dgaCode: {
+                        required
+                    },
+                    channelCaudal: {
+                        required
+                    },
+                    channelAlturaLimnimetrica: {
+                        integer
+                    },
+                    channelTotalizador: {
+                        integer
+                    }
+                    
+                    
+                }
             }
         },
 
@@ -176,8 +246,52 @@
         },
 
         methods: {
+            setTouched(theModel) { 
+                if(theModel == 'client_id' || theModel == 'all' )
+                {this.v$.form.client_id.$touch()}
+
+                if(theModel == 'client_config_id' || theModel == 'all'){
+                    this.v$.form.client_config_id.$touch()
+                } 
+                if(theModel == 'schedule_id' || theModel == 'all' )
+                {
+                    this.v$.form.schedule_id.$touch()
+                }
+
+                if(theModel == 'zeusName' || theModel == 'all' )
+                {
+                    this.v$.form.zeusName.$touch()
+                }
+                if(theModel == 'zeusCode' || theModel == 'all' )
+                {
+                    this.v$.form.zeusCode.$touch()
+                }
+                
+                if(theModel == 'dgaCode' || theModel == 'all')
+                {
+                    this.v$.form.dgaCode.$touch()
+                }
+
+                if(theModel == 'channelCaudal' || theModel == 'all')
+                {
+                    this.v$.form.channelCaudal.$touch()
+                }
+
+                if(theModel == 'channelAlturaLimnimetrica' || theModel == 'all')
+                {
+                    this.v$.form.channelAlturaLimnimetrica.$touch()
+                }
+
+                if(theModel == 'channelTotalizador' || theModel == 'all')
+                {
+                    this.v$.form.channelTotalizador.$touch()
+                }
+                
+               
+            },
             closeModal() {
                 this.$emit('cerrar'); 
+                this.success = false;
             },
 
             closeModalOutside(event) {
@@ -283,9 +397,10 @@
             }, 
 
 
-            async saveDevice() {
-                try {
-                    const response = await axios.put(
+            saveDevice() {
+                this.setTouched('all');
+                if(!this.v$.$invalid) {
+                    axios.put(
                         this.$store.state.backendUrl + '/devices/' + this.form.id,
                         this.form,
                         {
@@ -303,10 +418,6 @@
                     .catch((error) =>  {
                         console.log("Error en post: ", error); 
                     })
-
-                    
-                } catch(error) {
-                    console.error('Error en la solicitud a la API:', error);
                 }
                 
             }

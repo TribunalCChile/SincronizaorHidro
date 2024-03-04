@@ -40,12 +40,12 @@
 
     <AddConfigModal
         :showModal="showAddModal"
-        @cerrar="showAddModal = false"
+        @cerrar="onCloseAdd"
     />
     <EditConfigModal
         :showModal="showEditModal"
         :configClient="config_id"
-        @cerrar="showEditModal = false"
+        @cerrar="onCloseEdit"
     />
 </template>
 
@@ -122,6 +122,7 @@
                             params: {
                                 'client': true
                             },
+                           
                             headers: {
                                 'Content-Type': 'application/json',
                                 Authorization: 'Bearer ' + this.$store.state.token,
@@ -137,7 +138,17 @@
                     this.ShowError = true;
                     // this.errorMsg = "Ha ocurrido un error: " + error;
                 }
+            },
+            onCloseAdd() {
+                this.showAddModal = false; 
+                this.getConfigs();
+            },
+            onCloseEdit() {
+                this.showEditModal = false; 
+                this.getConfigs();
             }
+
+            
         }
     }
 

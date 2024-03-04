@@ -67,12 +67,18 @@
 
 <script>
     import axios from 'axios';
+    import useVuelidate from '@vuelidate/core';
+    import { required, integer, minValue } from '@vuelidate/validators';
+
     export default {
         name: 'EditUser',
         props: {
             showModal: Boolean,
             user: Object
             
+        },
+        setup() {
+            return { v$: useVuelidate() }
         },
         data() {
             return {
@@ -90,6 +96,28 @@
                 
             }
         },
+        validations() {
+            return {
+                form: {
+                    profile_id:{
+                        required
+                    },
+                    name: {
+                        required
+                    },
+                    email: {
+                        required
+                    },
+                    password: {
+                        required
+                    },
+                    password_confirmation: {
+                        required
+                    },    
+                }
+            }
+        },
+
         watch: {
             user: {
                 handler(newConfig) {
@@ -110,6 +138,27 @@
             this.getProfiles(); 
         },
         methods: {
+            setTouched(theModel) { 
+                if(theModel == 'profile_id' || theModel == 'all' )
+                {this.v$.form.profile_id.$touch()}
+
+                if(theModel == 'name' || theModel == 'all'){
+                    this.v$.form.name.$touch()
+                } 
+                if(theModel == 'email' || theModel == 'all' )
+                {
+                    this.v$.form.email.$touch()
+                }
+
+                if(theModel == 'passowrd' || theModel == 'all' )
+                {
+                    this.v$.form.password.$touch()
+                }
+                if(theModel == 'password_confirmation' || theModel == 'all' )
+                {
+                    this.v$.form.password_confirmation.$touch()
+                } 
+            },
             closeModal() {
                 this.$emit('cerrar'); 
             },
@@ -155,7 +204,8 @@
 
 
             saveUser() {
-                try {
+                this.setTouched('all'); 
+                if (!this.v$.$invalid) {
                     axios.put(
                         this.$store.state.backendUrl + '/users/' + this.form.id,
                         this.form,
@@ -174,15 +224,9 @@
                     .catch((error) =>  {
                         console.log("Error en post: ", error); 
                     })
-
-                    
-                } catch(error) {
-                    console.error('Error en la solicitud a la API:', error);
-                }
+                }    
                 
             }
         }
-
     }
-    
 </script>

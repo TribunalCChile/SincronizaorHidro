@@ -14,6 +14,10 @@
                     placeholder="Nombre"
                     aria-describedby="Nombre Cliente"
                     v-model="form.name"
+                    @input="setTouched('name')"
+                    feedback="Rellene este campo por favor."
+                    :invalid="v$.form.name.$error"
+
                 />
             </CForm>
         </CModalBody>
@@ -28,11 +32,26 @@
 
 <script>
     import axios from 'axios';
+    import useVuelidate from '@vuelidate/core'
+    import { required } from '@vuelidate/validators'
+
     export default {
         name: 'EditUser',
         props: {
             showModal: Boolean,
             client: Object
+        },
+        setup() {
+            return { v$: useVuelidate() }
+        },
+        validations() {
+            return {
+                form: {
+                    name:{
+                        required
+                    }
+                }
+            }
         },
         data() {
             return {
@@ -61,8 +80,13 @@
             }
         },
         methods: {
+            setTouched(theModel) { 
+                if(theModel == 'name' || theModel == 'all' )
+                {this.v$.form.name.$touch()}
+            },
             closeModal() {
                 this.$emit('cerrar'); 
+                this.success = false;
             },
 
             closeModalOutside(event) {
@@ -79,9 +103,10 @@
                 } 
             },
 
-            async saveClient() {
-                try {
-                    const response = await axios.put(
+            saveClient() {
+                this.setTouched('all');
+                if(!this.v$.$invalid) {
+                    axios.put(
                         this.$store.state.backendUrl + '/clients/' + this.form.id,
                         this.form,
                         {
@@ -99,10 +124,6 @@
                     .catch((error) =>  {
                         console.log("Error en post: ", error); 
                     })
-
-                    
-                } catch(error) {
-                    console.error('Error en la solicitud a la API:', error);
                 }
                 
             }
