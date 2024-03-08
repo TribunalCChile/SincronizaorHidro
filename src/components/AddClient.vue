@@ -41,6 +41,7 @@
         setup() {
             return { v$: useVuelidate() }
         },
+        emits: ['cerrarEditModal'],
         data() {
             return {
                 form: {
@@ -62,7 +63,7 @@
         },
         methods: {
             closeModal() {
-                this.$emit('cerrar'); 
+                this.$emit('cerrarAddModal'); 
                 this.success = false; 
                 this.form.name = '';
                 this.v$.$reset();

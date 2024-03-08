@@ -8,23 +8,14 @@
                 :visible="success">
                 {{ successMsg }}
             </CAlert>
-<<<<<<< HEAD
+
             <div>
                 <CButton color="danger" variant="outline" @click="handleDeleteModal">
                     <CIcon :icon="icon.cilTrash" size="lg"/>
                 </CButton>
             </div>
             <CForm class="mt-3">
-=======
-            <CForm>
-                <CRow class="justify-content-end">
-                    <CCol class="">
-                        <CButton @click="deleteClient" color="danger"  variant="outline" >
-                            <CIcon :icon="icon.cilTrash" size="lg"/>
-                        </CButton>
-                    </CCol>
-                </CRow>
->>>>>>> cde013cd2844bf5f0c3da6106e8c24b06cb6e32a
+
                 <CFormInput
                     type="text"
                     placeholder="Nombre"
@@ -46,7 +37,7 @@
         </CModalFooter>
     </CModal>
 
-<<<<<<< HEAD
+
     <DeleteModal
         :showDeleteModal="showDeleteModal"
         @cerrarDelete="onCloseDeleteModal"
@@ -60,15 +51,7 @@
         </template>
 
     </DeleteModal>
-=======
-    <DeleteModal 
-        :showDeleteModal="showDeleteModal"
-    >
-        <template v-slot:modalTitle>Eliminar Cliente</template>
-        <template v-slot:modalBody><b>ADVERTENCIA: Todos los datos del cliente serán eliminados.</b></template>
-        <template v-slot:modalFooter></template>
-    </DeleteModal> 
->>>>>>> cde013cd2844bf5f0c3da6106e8c24b06cb6e32a
+
 </template>
 
 <script>
@@ -77,11 +60,8 @@
     import { required } from '@vuelidate/validators'
     import { CIcon } from '@coreui/icons-vue';
     import * as icon from '@coreui/icons';
-<<<<<<< HEAD
     import DeleteModal from './DeleteModal.vue'; 
-=======
-    import DeleteModal from './DeleteModal'; 
->>>>>>> cde013cd2844bf5f0c3da6106e8c24b06cb6e32a
+
 
     export default {
         name: 'EditUser',
@@ -89,6 +69,7 @@
             CIcon,
             DeleteModal,
         },
+        emits: ['cerrarEditModal', 'update:showModal'], 
         props: {
             showModal: Boolean,
             client: Object
@@ -98,14 +79,14 @@
             DeleteModal
         },
         setup() {
-<<<<<<< HEAD
+
             return { 
                 v$: useVuelidate(),
                 icon
             }
-=======
-            return { v$: useVuelidate(), icon }
->>>>>>> cde013cd2844bf5f0c3da6106e8c24b06cb6e32a
+
+           
+
         },
         validations() {
             return {
@@ -129,6 +110,7 @@
                 
             }
         },
+        emits: ['cerrarEditModal'],
         watch: {
             client: {
                 handler(newConfig) {
@@ -155,7 +137,7 @@
                 
             },
             closeModal() {
-                this.$emit('cerrar'); 
+                this.$emit('cerrarEditModal'); 
                 this.success = false;
             },
 
@@ -197,33 +179,11 @@
                 }
                 
             },
-<<<<<<< HEAD
             onCloseDeleteModal() {
+                console.log("cerre modal Delete Modal"); 
                 this.showDeleteModal = false; 
-=======
 
-            deleteClient() {
-                this.showDeleteModal = true; 
-                /* const deletedClient = this.client; 
-                axios.delete(
-                    this.$store.state.backendUrl + '/clients/' + deletedClient.id,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: 'Bearer ' + this.$store.state.token,
-                        }
-                    }
-                )
-                .then((res) => {
-                        console.log(res.data); 
-                        //this.successMsg = "Cliente eliminado exitósamente."; 
-                        //this.success = true; 
-                })
-                .catch((error) =>  {
-                    console.log("Error en post: ", error); 
-                }) */
->>>>>>> cde013cd2844bf5f0c3da6106e8c24b06cb6e32a
-            }
+            },
         }
 
     }

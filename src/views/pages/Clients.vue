@@ -1,6 +1,4 @@
 <template>
-    
-    
     <CRow class="mb-4">
         <CCol class="col-3 mt-4">
             <CButton @click="addClient" color="success" shape="rounded-pill" variant="outline">
@@ -32,12 +30,12 @@
     </CTable>
     <AddClientModal
         :showModal="showAddModal"
-        @cerrar="onCloseAdd"
+        @cerrarAddModal="onCloseAdd"
     />
     <EditClientModal
         :showModal="showEditModal"
         :client="client_id"
-        @cerrar="onCloseEdit"
+        @cerrarEditModal="onCloseEdit"
     />
 </template>
 
@@ -130,6 +128,7 @@
                 this.getClients(); 
             },
             onCloseEdit() {
+                console.log("cerré modal editClient")
                 this.showEditModal = false;
                 this.getClients(); 
             }

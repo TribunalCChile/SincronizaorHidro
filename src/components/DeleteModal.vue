@@ -1,15 +1,11 @@
 <template>
-<<<<<<< HEAD
+
+    
     <CModal :visible="showDeleteModal" @click.native="closeDeleteModalOutside">
         <CModalHeader>
             <CModalTitle>
-                <slot name="modalTitle">Desasignar</slot>
-=======
-    <CModal :visible="showDeleteModal" @click.native="closeModalOutside">
-        <CModalHeader>
-            <CModalTitle>
                 <slot name="modalTitle"></slot>
->>>>>>> cde013cd2844bf5f0c3da6106e8c24b06cb6e32a
+
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -21,17 +17,13 @@
                 color="danger" 
                 class="text-white">Eliminar
             </CButton>
-<<<<<<< HEAD
+
             <CButton color="primary" @click="closeDeleteModal">Cancelar</CButton>
-=======
-            <CButton color="primary" @click="closeModal">Cancelar</CButton>
->>>>>>> cde013cd2844bf5f0c3da6106e8c24b06cb6e32a
         </CModalFooter>
     </CModal>
 </template>
 
 <script>
-<<<<<<< HEAD
     import axios from 'axios'; 
     export default {
         name: 'DeleteModal',
@@ -44,9 +36,10 @@
                 
             }
         },
+        emits: ['cerrarDelete'],
         methods: {
             closeDeleteModal() {
-                this.$emit('cerrarDelete');    
+                this.$emit('cerrarDelete', false);    
             },
             closeDeleteModalOutside(event) {
                 if (event.target === event.currentTarget) {
@@ -76,24 +69,7 @@
                     //this.errorMsg = "Ha ocurrido un error: " + error; 
                 }) */
             }
-=======
-    export default {
-        name: 'DeleteModal',
-        props: {
-            showDeleteModal: false
-        },
-        methods: {
-            closeModal() {
-                this.$emit('cerrar'); 
-                //this.success = false;
-            },
 
-            closeModalOutside(event) {
-                if (event.target === event.currentTarget) {
-                    this.closeModal();
-                }
-            },
->>>>>>> cde013cd2844bf5f0c3da6106e8c24b06cb6e32a
         }
-    }
+    }           
 </script>
