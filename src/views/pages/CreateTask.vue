@@ -27,7 +27,7 @@
                     <CCol class="col-6">
                         <CRow class="px-5">
                             <CCol class="col-4" v-for="hour in hours" :key="hour">
-                                <CFormCheck :label="hour" v-model="selectedHours" />
+                                <CFormCheck :label="hour" v-model="selectedHours[hour]" />
                             </CCol>
                         </CRow>
                         
@@ -68,7 +68,7 @@
                         '09:00','10:00','11:00','12:00','13:00',
                         '14:00','15:00','16:00','17:00','18:00',
                         '19:00','20:00','21:00','22:00','23:00','24:00'],
-                selectedHours: [],
+                selectedHours: {},
                 isSelected: false,
             }
         },
@@ -77,9 +77,6 @@
         }, 
 
         methods: {
-            //handleClient() {
-             //   let clientSelected = this.
-            //}
             handleClients(options) {
                 this.clientsFilter = options; 
                 this.getDevicesByClients(); 
@@ -89,6 +86,7 @@
                 this.devicesFilter = options;
                 console.log("HANDLE DEVICES: ",this.devicesFilter); 
                 this.isSelected = true;
+                this.getDevicesByClients();
             }, 
 
             async getClients() {

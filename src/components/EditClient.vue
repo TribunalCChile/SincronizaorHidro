@@ -8,7 +8,12 @@
                 :visible="success">
                 {{ successMsg }}
             </CAlert>
-            <CForm>
+            <div>
+                <CButton color="danger" variant="outline" @click="handleDeleteModal">
+                    <CIcon :icon="icon.cilTrash" size="lg"/>
+                </CButton>
+            </div>
+            <CForm class="mt-3">
                 <CFormInput
                     type="text"
                     placeholder="Nombre"
@@ -28,21 +33,45 @@
             <CButton color="primary" @click="saveClient">Guardar</CButton>
         </CModalFooter>
     </CModal>
+
+    <DeleteModal
+        :showDeleteModal="showDeleteModal"
+        @cerrarDelete="onCloseDeleteModal"
+        :client="form"
+    >
+        <template v-slot:modalTitle>Eliminar Cliente</template>
+        <template v-slot:modalBody>
+            <b>ADVERTENCIA:</b> Se eliminarán todos los datos de este cliente.
+        </template>
+        <template v-slot:modalFooter>
+        </template>
+
+    </DeleteModal>
 </template>
 
 <script>
     import axios from 'axios';
     import useVuelidate from '@vuelidate/core'
     import { required } from '@vuelidate/validators'
+    import { CIcon } from '@coreui/icons-vue';
+    import * as icon from '@coreui/icons';
+    import DeleteModal from './DeleteModal.vue'; 
 
     export default {
         name: 'EditUser',
+        components: {
+            CIcon,
+            DeleteModal,
+        },
         props: {
             showModal: Boolean,
             client: Object
         },
         setup() {
-            return { v$: useVuelidate() }
+            return { 
+                v$: useVuelidate(),
+                icon
+            }
         },
         validations() {
             return {
@@ -60,7 +89,8 @@
                     name: '',
                 },
                 success: false,
-                successMsg: ''
+                successMsg: '',
+                showDeleteModal: false,
                 
             }
         },
@@ -70,7 +100,7 @@
                     this.setDataClient(newConfig);
                 },
                 deep: true,
-                immediate: true // Esto llama a setDataConfig() inmediatamente después de montar el componente
+                immediate: true 
             },
             showModal(newValue) {
                 // Si la modal se cierra, restablecer el valor de showModal
@@ -83,6 +113,11 @@
             setTouched(theModel) { 
                 if(theModel == 'name' || theModel == 'all' )
                 {this.v$.form.name.$touch()}
+            },
+
+            handleDeleteModal() {
+                this.showDeleteModal = true; 
+                
             },
             closeModal() {
                 this.$emit('cerrar'); 
@@ -126,6 +161,9 @@
                     })
                 }
                 
+            },
+            onCloseDeleteModal() {
+                this.showDeleteModal = false; 
             }
         }
 

@@ -4,8 +4,7 @@
         multiple
         v-model="selectedDevices" 
         :options="devices"
-        @option:selected="filter" 
-        
+        @option:selected="filter"
         :reduce="device => device.id"
         label="zeusName"
         placeholder="Seleccione..."

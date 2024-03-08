@@ -120,8 +120,14 @@
                 let filterTasks = this.statusTasks; 
                 if (this.clientsFilter.length > 0) {
                     filterTasks = filterTasks.filter(task => 
-                        this.clientsFilter.includes(task.last_error.client_id) 
+                        this.clientsFilter.includes(task.client_id) 
                     );
+                }
+
+                if (this.devicesFilter.length > 0) {
+                    filterTasks = filterTasks.filter(task => 
+                        this.devicesFilter.includes(task.device_id)
+                    )
                 }
 
                 if (this.enabledFilter) {
@@ -129,7 +135,7 @@
                         task.enabled === 1
                     );
                 }
-
+                
                 return filterTasks; 
             }
 
