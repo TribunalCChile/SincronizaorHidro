@@ -1,32 +1,32 @@
 <template>
     <CRow>
         <CCol>
-            <DatePicker /> 
+            <label class="form-label">Fecha</label>
+            <DatePicker
+                v-model="dateRange"
+                placeholder="Escoja un rango de fechas"
+                @update:model-value="handleDate"
+                range
+
+            /> 
         </CCol>
-        <CCol>
-            <DatePicker /> 
+        
+        <CCol class="col-3">
+            <ClientFilter 
+                @filter="handleClients"
+                
+            /> 
         </CCol>
-        <CCol>
-            <CFormSelect 
-                class="form-select mb-3" 
-                aria-label="Select Clientes">
-                <option>Seleccione un cliente</option>
-                <option v-for="client in clients" 
-                    :key="client.id" 
-                    :value="client.id"> {{ client.name }}
-                </option>
-            </CFormSelect>
+        <CCol class="col-3">
+            <DeviceFilter 
+                :devices="devicesFilter"
+                @filter="handleDevices"
+            /> 
         </CCol>
-        <CCol>
-            <CFormSelect 
-                class="form-select mb-3" 
-                aria-label="Select Dispositivos">
-                <option>Seleccione un dispositivo</option>
-                <option v-for="device in devices" 
-                    :key="device.id" 
-                    :value="device.id"> {{ device.name }}
-                </option>
-            </CFormSelect>
+        <CCol class="mt-4">
+            <CButton color="primary" @click="getQueueTasksTest" class="mt-1">
+                Buscar
+            </CButton>
         </CCol>
     </CRow>
 </template>
@@ -41,24 +41,52 @@
         name: 'TaskQueue',
         components: {
             DatePicker,
+            ClientFilter,
+            DeviceFilter
         },
         data() {
             return {
                 clientSelected: '',
                 clients: [],
                 devices: [],
+                clientsFilter: [],
+                devicesFilter: [],
+                dateRange: [null, null],
+                formatDates: [null, null], 
             }
         },
 
         mounted() {
+            const today = new Date();
+            this.dateRange = [today, today];
             //this.getClients();
             //this.getDevices(); 
         }, 
 
         methods: {
-            //handleClient() {
-             //   let clientSelected = this.
-            //}
+            getQueueTasksTest() {
+                let date1, date2; 
+                date1 = this.dateRange[0]; 
+                date2 = this.dateRange[1]; 
+                this.clients = this.clientsFilter.map(client => client.id); 
+                console.log(this.clients); 
+                console.log("Clients: ",this.clientsFilter); 
+                console.log("Dispositivos: ",this.devicesFilter); 
+                console.log(`Date Range: ${this.dateRange}`); 
+                console.log(date1);
+                console.log(date2); 
+            },
+            handleDate(modelData) {
+                this.dateRange = modelData.map(date => {
+                    if (date instanceof Date) {
+                        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+                    }
+                    return date;
+                });
+                console.log("RANGE DATA: ",this.dateRange); 
+            },
+           
+           
             async getQueueTasks() {
                 try {
                     let params = {
@@ -86,6 +114,16 @@
                         // this.errorMsg = "Ha ocurrido un error: " + error;
                 }
             },
+            handleClients(options) {
+                this.clientsFilter = options; 
+                this.getDevicesByClients(); 
+                
+            }, 
+            handleDevices(options) {
+                this.devicesFilter = options; 
+                console.log("Devices: ",this.devicesFilter); 
+                this.getDevicesByClients(); 
+            }, 
 
             async getDevices() {
                 try {
@@ -109,6 +147,32 @@
                     this.ShowError = true;
                         
                         // this.errorMsg = "Ha ocurrido un error: " + error;
+                }
+            },
+            async getDevicesByClients() { 
+                try {
+                    let devices = []; 
+                    for (const client_id of this.clientsFilter) {
+                        const response = await axios.get(
+                            this.$store.state.backendUrl + "/devices",
+                            {
+                                params: {
+                                    'client_id': client_id,
+                                    'clientConfig': true
+                                },
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer " + this.$store.state.token,
+                                },
+                            }
+                        )
+                        devices = devices.concat(response.data); 
+                    }
+
+                    this.devicesFilter = devices; 
+                } catch (error) {
+                    console.error('Error en la solicitud a la API:', error);
+                    this.ShowError = true;
                 }
             }
         }

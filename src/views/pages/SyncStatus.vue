@@ -163,11 +163,8 @@
             handleDevices(options) {
                 this.devicesFilter = options; 
                 console.log(options); 
+                this.getDevicesByClients(); 
             }, 
-
-            handleDevices(devices) {
-                this.devicesFilter = devices; 
-            },
 
             async getStatusTasks() {
                 const response = await axios.get(
@@ -187,7 +184,6 @@
             async getDevicesByClients() { 
                 try {
                     let devices = []; 
-                    console.log("EN TRY: ",this.$store.state.token)
                     for (const client_id of this.clientsFilter) {
                         const response = await axios.get(
                             this.$store.state.backendUrl + "/devices",
@@ -202,15 +198,11 @@
                                 },
                             }
                         )
-                        devices = devices.concat(response.data.map(config => ({
-                            ...config,
-                            host: config.client_config.zeusHost
-                        }))); 
+                        devices = response.data;
                     }
 
                     this.devicesFilter = devices; 
                 } catch (error) {
-                    console.log("EN CATCH: ", this.$store.state.token); 
                     console.error('Error en la solicitud a la API:', error);
                     this.ShowError = true;
                 }

@@ -1,5 +1,5 @@
 <template>
-    <CModal :visible="showModal" @click.native="closeModalOutside">
+    <CModal :visible="showAddModal" @close="closeModal">
         <CModalHeader>
             <CModalTitle>Nuevo Cliente</CModalTitle>
         </CModalHeader>
@@ -36,12 +36,12 @@
     export default {
         name: 'AddClient',
         props: {
-            showModal: Boolean,
+            showAddModal: Boolean,
         },
         setup() {
             return { v$: useVuelidate() }
         },
-        emits: ['cerrarEditModal'],
+        emits: ['cerrarAddModal'],
         data() {
             return {
                 form: {

@@ -29,11 +29,11 @@
         </CTableBody>
     </CTable>
     <AddClientModal
-        :showModal="showAddModal"
+        :showAddModal="showAddModal"
         @cerrarAddModal="onCloseAdd"
     />
     <EditClientModal
-        :showModal="showEditModal"
+        :showEditModal="showEditModal"
         :client="client_id"
         @cerrarEditModal="onCloseEdit"
     />

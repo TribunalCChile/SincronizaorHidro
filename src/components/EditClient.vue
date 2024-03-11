@@ -1,5 +1,5 @@
 <template>
-    <CModal :visible="showModal" @click.native="closeModalOutside">
+    <CModal :visible="showEditModal" @close="closeModal">
         <CModalHeader>
             <CModalTitle>Editar Cliente</CModalTitle>
         </CModalHeader>
@@ -40,7 +40,7 @@
 
     <DeleteModal
         :showDeleteModal="showDeleteModal"
-        @cerrarDelete="onCloseDeleteModal"
+        @closeDeleteModal="onCloseDeleteModal"
         :client="form"
     >
         <template v-slot:modalTitle>Eliminar Cliente</template>
@@ -69,24 +69,16 @@
             CIcon,
             DeleteModal,
         },
-        emits: ['cerrarEditModal', 'update:showModal'], 
+        emits: ['update:showEditModal','cerrarEditModal'], 
         props: {
-            showModal: Boolean,
+            showEditModal: Boolean,
             client: Object
         },
-        components: {
-            CIcon,
-            DeleteModal
-        },
         setup() {
-
             return { 
                 v$: useVuelidate(),
                 icon
             }
-
-           
-
         },
         validations() {
             return {
@@ -106,11 +98,10 @@
                 showDeleteModal: false,
                 success: false,
                 successMsg: '',
-                showDeleteModal: false,
                 
             }
         },
-        emits: ['cerrarEditModal'],
+        emits: ['onUpdate:showEditModal','cerrarEditModal'],
         watch: {
             client: {
                 handler(newConfig) {
@@ -119,10 +110,10 @@
                 deep: true,
                 immediate: true 
             },
-            showModal(newValue) {
+            showEditModal(newValue) {
                 // Si la modal se cierra, restablecer el valor de showModal
                 if (!newValue) {
-                    this.$emit('update:showModal', false);
+                    this.$emit('update:showEditModal');
                 }
             }
         },
@@ -182,6 +173,7 @@
             onCloseDeleteModal() {
                 console.log("cerre modal Delete Modal"); 
                 this.showDeleteModal = false; 
+                
 
             },
         }

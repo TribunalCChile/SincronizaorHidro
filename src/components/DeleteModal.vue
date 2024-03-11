@@ -1,7 +1,7 @@
 <template>
 
     
-    <CModal :visible="showDeleteModal" @click.native="closeDeleteModalOutside">
+    <CModal :visible="showDeleteModal" @close="closeModal">
         <CModalHeader>
             <CModalTitle>
                 <slot name="modalTitle"></slot>
@@ -18,7 +18,7 @@
                 class="text-white">Eliminar
             </CButton>
 
-            <CButton color="primary" @click="closeDeleteModal">Cancelar</CButton>
+            <CButton color="primary" @click="closeModal">Cancelar</CButton>
         </CModalFooter>
     </CModal>
 </template>
@@ -36,16 +36,22 @@
                 
             }
         },
-        emits: ['cerrarDelete'],
+        emits: ['closeDeleteModal'],
         methods: {
-            closeDeleteModal() {
+            closeModal() {
+                this.$emit('closeDeleteModal'); 
+            },
+            
+            /*closeDeleteModal() {
                 this.$emit('cerrarDelete', false);    
             },
             closeDeleteModalOutside(event) {
+                console.log("cierra delete con la X");
                 if (event.target === event.currentTarget) {
                     this.closeDeleteModal();
                 }
             },
+            */
             deleteProduct() {
                 /* console.log(this.$store.state.token); 
                 axios.post(

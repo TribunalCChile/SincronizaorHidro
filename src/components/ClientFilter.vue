@@ -45,7 +45,7 @@
                     );
                     
                     this.clients = response.data;
-                    console.log(this.clients[0])
+                    
                 } catch (error) {
                     console.error('Error en la solicitud a la API:', error);
                     this.ShowError = true;
@@ -57,7 +57,7 @@
             filter(e) {
                 console.log(this.selectedClients);
                 this.$emit('filter', this.selectedClients);
-                this.$emit('fetch-devices', []); 
+                
             }
         }
     }

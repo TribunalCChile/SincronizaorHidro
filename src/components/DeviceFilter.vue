@@ -33,8 +33,8 @@
 
         methods: {
             filter(e) {
-                console.log(e)
-                this.$emit('filter', e);
+                console.log(this.selectedDevices); 
+                this.$emit('filter',e);
             }
         }
     }
