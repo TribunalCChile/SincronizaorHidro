@@ -1,0 +1,1 @@
+import{a as n,b as c,d as s,e as l}from"./index-B2bLNPmI.js";const _={__name:"SearchFilter",emits:["search"],setup(p,{emit:r}){const t=r,a=e=>{t("search",e.target.value)};return(e,m)=>{const o=n("CFormInput");return c(),s("div",null,[l(o,{onInput:a,placeholder:"Filtrar por nombre...","aria-label":"busquedaInput",label:"Buscar"})])}}};export{_};
