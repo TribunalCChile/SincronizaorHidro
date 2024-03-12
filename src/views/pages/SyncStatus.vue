@@ -117,13 +117,13 @@
 
         computed: {
             filteredTasks() {
-                let filterTasks = this.statusTasks; 
+                let filterTasks = [...this.statusTasks];
                 if (this.clientsFilter.length > 0) {
                     filterTasks = filterTasks.filter(task => 
                         this.clientsFilter.includes(task.client_id) 
                     );
                 }
-
+               
                 if (this.devicesFilter.length > 0) {
                     filterTasks = filterTasks.filter(task => 
                         this.devicesFilter.includes(task.device_id)
@@ -135,7 +135,7 @@
                         task.enabled === 1
                     );
                 }
-                
+                console.log(filterTasks); 
                 return filterTasks; 
             }
 
