@@ -24,11 +24,50 @@
             /> 
         </CCol>
         <CCol class="mt-4">
-            <CButton color="primary" @click="getQueueTasksTest" class="mt-1">
+            <CButton color="primary" @click="getQueueTasks" class="mt-1">
                 Buscar
             </CButton>
         </CCol>
     </CRow>
+
+    <CTable class="mt-5">
+        <CTableHead>
+            <CTableRow color="dark">
+                <CTableHeaderCell scope="col">Estado</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Cliente</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Fecha</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Hora</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Dispositivo</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Nivel Freatico</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Caudal</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Totalizador</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Fecha Medición</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Comprobante DGA</CTableHeaderCell>
+                <!--  <CTableHeaderCell scope="col">Sincronizado el</CTableHeaderCell>-->
+            </CTableRow>
+        </CTableHead>
+        <CTableBody>
+            <CTableRow v-for="(task, index) in tasksQueue" :key="task.id">
+                <CTableDataCell>{{ getStepName(task.step) }} </CTableDataCell>
+                <CTableDataCell>{{ task.client.name }} </CTableDataCell>
+                <CTableDataCell>{{ task.taskDate }} </CTableDataCell>
+                <CTableDataCell>{{ task.taskHour }} </CTableDataCell>
+                <CTableDataCell>{{ task.device.zeusName }} </CTableDataCell>
+                <CTableDataCell>{{ task.device.channelNivelFreatico }} </CTableDataCell>
+                <CTableDataCell>{{ task.device.channelCaudal }} </CTableDataCell>
+                <CTableDataCell>{{ task.device.channelTotalizador }} </CTableDataCell>
+                <CTableDataCell>{{ task.updated_at }} </CTableDataCell>
+                <template v-if="task.dgaNumeroComprobante !== null">
+                    <CTableDataCell>{{ task.dgaNumeroComprobante }} </CTableDataCell>
+                </template>
+                <template v-else>
+                    <CTableDataCell></CTableDataCell>
+                </template>
+                
+                <!-- <CTableDataCell>{{  }} </CTableDataCell> -->
+            </CTableRow>
+        </CTableBody>
+    </CTable>
 </template>
 
 <script>
@@ -46,6 +85,7 @@
         },
         data() {
             return {
+                tasksQueue: [],
                 clientSelected: '',
                 clients: [],
                 devices: [],
@@ -64,18 +104,25 @@
         }, 
 
         methods: {
-            getQueueTasksTest() {
-                let date1, date2; 
-                date1 = this.dateRange[0]; 
-                date2 = this.dateRange[1]; 
-                this.clients = this.clientsFilter.map(client => client.id); 
-                console.log(this.clients); 
-                console.log("Clients: ",this.clientsFilter); 
-                console.log("Dispositivos: ",this.devicesFilter); 
-                console.log(`Date Range: ${this.dateRange}`); 
-                console.log(date1);
-                console.log(date2); 
+            getStepName(step) {
+                let name; 
+                switch(step) {
+                    case 1:
+                        name = 'En cola zeus';
+                        break; 
+                    case 2: 
+                        name = 'En cola DGA';
+                        break; 
+                    case 3:
+                        name = 'Finalizado';
+                        break; 
+                    default: 
+                        name = '';
+                }
+
+                return name; 
             },
+
             handleDate(modelData) {
                 this.dateRange = modelData.map(date => {
                     if (date instanceof Date) {
@@ -88,14 +135,20 @@
            
            
             async getQueueTasks() {
+                let date1, date2; 
+                date1 = this.dateRange[0]; 
+                date2 = this.dateRange[1]; 
+                this.devices = this.devicesFilter.map(device => device.id); 
+
                 try {
                     let params = {
-                        'client': true,
-                        'client_id': 2
+                        'clients': this.clientsFilter,
+                        'devices': this.devices,
+                        'date1': date1,
+                        'date2': date2,
                     }
                     const response = await axios.get(
-                        this.$store.state.backendUrl + '/clients',
-             
+                        this.$store.state.backendUrl + '/tasks',
                         {
                         params,
                         headers: {
@@ -105,8 +158,9 @@
                         }
                     );
                     
-                    this.clients = response.data;
-                    console.log(this.clients[0])
+                    this.tasksQueue = response.data;
+                    console.log(this.tasksQueue); 
+
                 } catch (error) {
                     console.error('Error en la solicitud a la API:', error);
                     this.ShowError = true;
