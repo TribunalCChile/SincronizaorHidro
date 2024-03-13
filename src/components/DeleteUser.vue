@@ -21,7 +21,9 @@
                 Cliente eliminado exitósamente. 
             </CAlert>
 
-            
+            <DeleteButton 
+                @click=""
+            />
             <CButton 
                 @click="deleteClient"
                 color="danger" 
@@ -39,7 +41,9 @@
 
     export default {
         name: 'DeleteModal',
-        
+        components: {
+            DeleteButton
+        },
         emits: ['closeDeleteModal'],
         props: {   
             showDeleteModal: Boolean, 

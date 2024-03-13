@@ -16,7 +16,7 @@
                 <CTableHeaderCell scope="col">Zeus Host</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Zeus Username</CTableHeaderCell>
                 <CTableHeaderCell scope="col">DGA Username</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Editar</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Herramientas</CTableHeaderCell>
             </CTableRow>
         </CTableHead>
         <CTableBody>
@@ -27,13 +27,12 @@
                 <CTableDataCell>{{ config.dgaUsername }} </CTableDataCell>
                 <CTableDataCell>
                     <CButton @click="editConfig(config)">
-                        <font-awesome-icon icon="pen-to-square" size="xl" /> 
-                        
-                        
+                        <font-awesome-icon icon="pen-to-square" size="xl" />
                     </CButton>
-                   
-                </CTableDataCell>
-                
+                    <CButton @click="deleteConfig(config)">
+                        <font-awesome-icon icon="trash" size="xl" />
+                    </CButton>
+                </CTableDataCell>   
             </CTableRow>
         </CTableBody>
     </CTable>
@@ -47,6 +46,19 @@
         :configClient="config_id"
         @cerrar="onCloseEdit"
     />
+    <DeleteConfigModal
+        :showDeleteModal="showDeleteModal"
+        @closeDeleteModal="onCloseDeleteModal"
+        :config="config_id"
+    >
+        <template v-slot:modalTitle>Eliminar Configuración de: <b>{{ config_id.client.name }}</b></template>
+        <template v-slot:modalBody>
+            ADVERTENCIA: Se eliminará toda la configuración.
+        </template>
+        <template v-slot:modalFooter>
+        </template>
+
+    </DeleteConfigModal>
 </template>
 
 <script>
@@ -56,13 +68,17 @@
     import EditConfigModal from '../../components/EditConfig.vue'; 
     import { CIcon } from '@coreui/icons-vue';
     import * as icon from '@coreui/icons';
+    import DeleteConfigModal from '../../components/DeleteConfig.vue'; 
+    
+
     export default {
         name: "Configurations",
         components: {
             SearchBarFilter,
             CIcon,
             AddConfigModal,
-            EditConfigModal
+            EditConfigModal,
+            DeleteConfigModal,
         },
         setup() {
             return {
@@ -75,6 +91,7 @@
                 searchFilter: '',
                 showAddModal: false,
                 showEditModal: false,
+                showDeleteModal: false,
                 config_id: null
             }
             
@@ -99,7 +116,7 @@
        
 
         mounted() {
-            this.getConfigs(); 
+            this.getConfigs();
         },
         
         methods: {
@@ -110,6 +127,13 @@
                 this.showEditModal = true;
                 this.config_id = config;      
             },
+
+            deleteConfig(config) {
+                this.showDeleteModal = true; 
+                this.config_id = config; 
+                console.log("CONFIG ID:",this.config_id)
+            },
+
             handleSearch(search) {
                 this.searchFilter = search; 
             },
@@ -129,16 +153,42 @@
                             }
                         }
                     );
+                    this.configs = response.data.map(config => ({
+                        ...config,
+                        clientName: config.client.name
+                    }));
                     
-                    this.configs = response.data;
-                    console.log(this.configs[0])
 
                 } catch (error) {
                     console.error('Error en la solicitud a la API:', error);
-                    this.ShowError = true;
+                    
                     // this.errorMsg = "Ha ocurrido un error: " + error;
                 }
             },
+
+            async getClients() {
+                try {
+                    const response = await axios.get(
+                        this.$store.state.backendUrl + '/clients',
+                        {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + this.$store.state.token,
+                        }
+                        }
+                    );
+                    
+                    this.clients = response.data;
+                    console.log(this.clients[0])
+                } catch (error) {
+                    console.error('Error en la solicitud a la API:', error);
+                    this.ShowError = true;
+                        
+                        // this.errorMsg = "Ha ocurrido un error: " + error;
+                }
+            },
+
+            
             onCloseAdd() {
                 this.showAddModal = false; 
                 this.getConfigs();
@@ -146,6 +196,10 @@
             onCloseEdit() {
                 this.showEditModal = false; 
                 this.getConfigs();
+            },
+            onCloseDeleteModal() {
+                this.showDeleteModal = false; 
+                this.getConfigs(); 
             }
 
             

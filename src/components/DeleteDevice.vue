@@ -21,7 +21,6 @@
                 Cliente eliminado exitósamente. 
             </CAlert>
 
-            
             <CButton 
                 @click="deleteClient"
                 color="danger" 

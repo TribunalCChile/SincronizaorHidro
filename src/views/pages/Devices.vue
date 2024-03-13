@@ -34,6 +34,9 @@
                     <CButton @click="editDevice(device)">
                         <font-awesome-icon icon="pen-to-square" size="xl" />
                     </CButton>
+                    <CButton @click="deleteDevice(device)">
+                        <font-awesome-icon icon="trash" size="xl" />
+                    </CButton>
                 </CTableDataCell>
                 
             </CTableRow>
@@ -48,6 +51,19 @@
         :device="device_id"
         @cerrar="onCloseEdit"
     />
+    <DeleteDeviceModal
+        :showDeleteModal="showDeleteModal"
+        @closeDeleteModal="onCloseDeleteModal"
+        :device="device_id"
+    >
+        <template v-slot:modalTitle>Eliminar dispositivo: <b>{{ device_id.zeusName }}</b></template>
+        <template v-slot:modalBody>
+            ADVERTENCIA: Se eliminarán todos los datos de este dispositivo.
+        </template>
+        <template v-slot:modalFooter>
+        </template>
+
+    </DeleteDeviceModal>
 </template>
 
 <script>
@@ -57,6 +73,7 @@
     import * as icon from '@coreui/icons';
     import AddDeviceModal from '../../components/AddDevice.vue'; 
     import EditDeviceModal from '../../components/EditDevice.vue'; 
+    import DeleteDeviceModal from '../../components/DeleteModal.vue'; 
 
     export default {
         name: "Devices",
@@ -65,6 +82,7 @@
             CIcon,
             AddDeviceModal,
             EditDeviceModal,
+            DeleteDeviceModal,
         },
         setup() {
             return {
@@ -78,6 +96,7 @@
                 status: false,
                 showAddModal: false,
                 showEditModal: false, 
+                showDeleteModal: false,
                 device_id: null,
                 
             }
@@ -112,6 +131,10 @@
 
             editDevice(device) {
                 this.showEditModal = true; 
+                this.device_id = device; 
+            },
+            deleteDevice(device) {
+                this.showDeleteModal = true; 
                 this.device_id = device; 
             },
 
@@ -150,6 +173,10 @@
             },
             onCloseEdit() {
                 this.showEditModal = false;
+                this.getDevices(); 
+            },
+            onCloseDeleteModal() {
+                this.showDeleteModal = false; 
                 this.getDevices(); 
             }
         }

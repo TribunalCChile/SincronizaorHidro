@@ -39,7 +39,6 @@
 
     export default {
         name: 'DeleteModal',
-        
         emits: ['closeDeleteModal'],
         props: {   
             showDeleteModal: Boolean, 

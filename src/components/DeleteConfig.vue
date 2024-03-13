@@ -14,16 +14,15 @@
         <CModalFooter>
             <CAlert color="danger"
                 :visible="fail">
-                Para eliminar este cliente no debe tener estaciones agregadas.
+                Para eliminar esta configuración no debe estar utilizandose.
             </CAlert>
             <CAlert color="success"
                 :visible="success">
-                Cliente eliminado exitósamente. 
+                Configuración eliminada exitósamente. 
             </CAlert>
 
-            
             <CButton 
-                @click="deleteClient"
+                @click="deleteConfig"
                 color="danger" 
                 class="text-white">Eliminar
             </CButton>
@@ -35,15 +34,13 @@
 
 <script>
     import axios from 'axios'; 
-    
 
     export default {
         name: 'DeleteModal',
-        
         emits: ['closeDeleteModal'],
         props: {   
             showDeleteModal: Boolean, 
-            client: Object
+            config: Object
         },
         data() {
             return {
@@ -59,13 +56,13 @@
             },
             
            
-            deleteClient() {
+            deleteConfig() {
                 if (this.client.client_configs.length) {
                     this.fail = true; 
                 
                 } else {
                     axios.delete(
-                        this.$store.state.backendUrl+'/clients/' + this.client.id,
+                        this.$store.state.backendUrl+'/client_configs/' + this.config.id,
                         {
                             headers: {
                                 "Content-Type": "application/json",

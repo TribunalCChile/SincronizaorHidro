@@ -39,7 +39,12 @@
         </CTableHead>
         <CTableBody>
             <CTableRow v-for="(task, index) in filteredTasks" :key="index">
-                <CTableDataCell>{{ task.client.name }} </CTableDataCell>
+                <template v-if="task.client !== null">
+                    <CTableDataCell>{{ task.client.name }} </CTableDataCell>
+                </template>
+                <template v-else> 
+                    <CTableDataCell> </CTableDataCell>
+                </template>
                 <CTableDataCell> {{ task.device.zeusName }} </CTableDataCell>
                 <CTableDataCell>{{ task.device.zeusCode }} </CTableDataCell>
                 <CTableDataCell>{{ task.last_error.updated_at }} </CTableDataCell>

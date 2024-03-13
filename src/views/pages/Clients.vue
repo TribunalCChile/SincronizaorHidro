@@ -13,7 +13,8 @@
         <CTableHead>
             <CTableRow color="dark">
                 <CTableHeaderCell scope="col">Nombre</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Editar</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Herramientas</CTableHeaderCell>
+                
             </CTableRow>
         </CTableHead>
         <CTableBody>
@@ -23,7 +24,11 @@
                     <CButton @click="editClient(client)">
                         <font-awesome-icon icon="pen-to-square" size="xl" />
                     </CButton>
+                    <CButton @click="deleteClient(client)">
+                        <font-awesome-icon icon="trash" size="xl" />
+                    </CButton>
                 </CTableDataCell>
+               
                 
             </CTableRow>
         </CTableBody>
@@ -37,6 +42,20 @@
         :client="client_id"
         @cerrarEditModal="onCloseEdit"
     />
+    <DeleteClient
+        :showDeleteModal="showDeleteModal"
+        @closeDeleteModal="onCloseDeleteModal"
+        :client="client_id"
+    >
+        <template v-slot:modalTitle>Eliminar Cliente: <b>{{ client_id.name }}</b></template>
+        <template v-slot:modalBody>
+            ADVERTENCIA: Se eliminarán todos los datos de este cliente.
+        </template>
+        <template v-slot:modalFooter>
+        </template>
+
+    </DeleteClient>
+
 </template>
 
 <script>
@@ -46,6 +65,7 @@
     import * as icon from '@coreui/icons';
     import AddClientModal from '../../components/AddClient.vue'; 
     import EditClientModal from '../../components/EditClient.vue'; 
+    import DeleteClient from '../../components/DeleteClient.vue'; 
 
     export default {
         name: "Clients",
@@ -53,7 +73,8 @@
             SearchBarFilter,
             CIcon,
             AddClientModal,
-            EditClientModal
+            EditClientModal,
+            DeleteClient
         },
         setup() {
             return {
@@ -66,6 +87,7 @@
                 searchFilter: '',
                 showAddModal: false,
                 showEditModal: false,
+                showDeleteModal: false,
                 client_id: null
             }
             
@@ -95,6 +117,11 @@
                 this.showEditModal = true; 
                 this.client_id = client; 
             },
+            deleteClient(client) {
+                this.showDeleteModal = true; 
+                this.client_id = client; 
+            },
+
             addClient() {
                 this.showAddModal = true; 
             },
@@ -131,7 +158,12 @@
                 console.log("cerré modal editClient")
                 this.showEditModal = false;
                 this.getClients(); 
-            }
+            },
+            onCloseDeleteModal() {
+                console.log("cerre modal Delete Modal"); 
+                this.showDeleteModal = false; 
+                this.getClients();
+            },
         }
     }
 

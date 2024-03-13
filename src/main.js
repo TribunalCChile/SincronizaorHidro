@@ -11,6 +11,7 @@ import {
     faPhone, 
     faClipboard,
     faPenToSquare,
+    faTrash
 
 } from '@fortawesome/free-solid-svg-icons'
 import DocsExample from '@/components/DocsExample'
@@ -25,6 +26,8 @@ import 'v-calendar/style.css';
 library.add(faPhone);
 library.add(faClipboard);
 library.add(faPenToSquare);
+library.add(faTrash);
+
 
 const app = createApp(App)
 app.use(store)

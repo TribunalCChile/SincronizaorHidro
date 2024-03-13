@@ -56,7 +56,7 @@
                 <CTableDataCell>{{ task.device.channelNivelFreatico }} </CTableDataCell>
                 <CTableDataCell>{{ task.device.channelCaudal }} </CTableDataCell>
                 <CTableDataCell>{{ task.device.channelTotalizador }} </CTableDataCell>
-                <CTableDataCell>{{ task.updated_at }} </CTableDataCell>
+                <CTableDataCell>{{ task.zeusDate }} </CTableDataCell>
                 <template v-if="task.dgaNumeroComprobante !== null">
                     <CTableDataCell>{{ task.dgaNumeroComprobante }} </CTableDataCell>
                 </template>
