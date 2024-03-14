@@ -1,7 +1,7 @@
 <template>
     <CModal size="lg" :visible="showModal" @click.native="closeModalOutside">
         <CModalHeader>
-            <CModalTitle>Agregar nuevo dispositivo</CModalTitle>
+            <CModalTitle>Editar dispositivo</CModalTitle>
         </CModalHeader>
         <CModalBody>
             <CAlert color="success"
@@ -20,9 +20,9 @@
                     <CCol class="col-12 mt-4">
                         <v-select
                             v-model="form.client_id"
-                            :options="configs"
-                            :reduce="config => config.client_id"
-                            label="clientName"
+                            :options="clients"
+                            :reduce="client => client.id"
+                            label="name"
                             placeholder="Seleccione..."
                             @input="setTouched('client_id')"
                             feedback="Rellene este campo por favor."
@@ -178,11 +178,13 @@
                     channelNivelFreatico: '',
                     channelCaudal: '',
                     channelTotalizador: '',
-                    channelAlturaLimnimetrica:''
+                    channelAlturaLimnimetrica:'',
+                    
                 },
                 schedules: [],
                 configs: [],
                 configsByClient: [],
+                clients: [],
                 successMsg: '', 
                 success: false,
                 
@@ -243,6 +245,7 @@
         mounted() {
             this.getUsersConfig();
             this.getSchedules(); 
+            this.getClients();
         },
 
         methods: {
@@ -387,6 +390,27 @@
                     
                     this.configsByClient = response.data;
                     console.log(this.configsByClient)
+                    
+
+                } catch (error) {
+                    console.error('Error en la solicitud a la API:', error);
+                    this.ShowError = true;
+                    // this.errorMsg = "Ha ocurrido un error: " + error;
+                }
+            }, 
+            async getClients() {
+                try {
+                    const response = await axios.get(
+                        this.$store.state.backendUrl + '/clients',
+                        {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + this.$store.state.token,
+                        }
+                        }
+                    );
+                    
+                    this.clients = response.data;
                     
 
                 } catch (error) {

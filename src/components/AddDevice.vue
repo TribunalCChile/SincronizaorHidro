@@ -42,7 +42,8 @@
                             :options="configs"
                             :reduce="config => config.id"
                             placeholder="Seleccione..."
-                            label="zeusHost"    
+                            label="dgaUsername"
+                            @option:selected="getCodesConfig"
                             @input="setTouched('client_config_id')"
                             feedback="Rellene este campo por favor."
                             :invalid="v$.form.client_config_id.$error"
@@ -246,6 +247,7 @@
             }
         },
         methods: {
+           
             setTouched(theModel) { 
                 if(theModel == 'client_id' || theModel == 'all' )
                 {this.v$.form.client_id.$touch()}

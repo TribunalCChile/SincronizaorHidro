@@ -113,6 +113,7 @@
             }, 
             handleDevices(options) {
                 this.devicesFilter = options; 
+                this.getDevicesByClients(); 
                 console.log("DEVICES: ",options); 
             }, 
 

@@ -13,10 +13,10 @@
                     <CCol class="col-12 mt-4">
                         <v-select 
                             v-model="form.client_id"
-                            :options="configs"
-                            :reduce="config => config.client_id"
+                            :options="clients"
+                            :reduce="client => client.id"
                             @option:selected="setData"
-                            label="clientName"
+                            label="name"
                             placeholder="Seleccione..."
                             @input="setTouched('client_id')"
                             feedback="Rellene este campo por favor."
@@ -143,6 +143,7 @@
                     dgaPassword: ''
                 },
                 configs: [],
+                clients: [],
                 success: false,
                 successMsg: ''
                 
@@ -184,6 +185,7 @@
 
         mounted() {
             this.getUsersConfig();
+            this.getClients();
         },
 
         methods: {
@@ -266,6 +268,27 @@
                         clientName: config.client.name
                     }));
                     console.log(this.configs[0])
+
+                } catch (error) {
+                    console.error('Error en la solicitud a la API:', error);
+                    this.ShowError = true;
+                    // this.errorMsg = "Ha ocurrido un error: " + error;
+                }
+            }, 
+            async getClients() {
+                try {
+                    const response = await axios.get(
+                        this.$store.state.backendUrl + '/clients',
+                        {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + this.$store.state.token,
+                        }
+                        }
+                    );
+                    
+                    this.clients = response.data;
+                    
 
                 } catch (error) {
                     console.error('Error en la solicitud a la API:', error);
