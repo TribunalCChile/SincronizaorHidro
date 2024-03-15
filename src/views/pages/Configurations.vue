@@ -50,6 +50,7 @@
         :showDeleteModal="showDeleteModal"
         @closeDeleteModal="onCloseDeleteModal"
         :config="config_id"
+        :devices="devices"
     >
         <template v-slot:modalTitle>Eliminar Configuración de: <b>{{ config_id.client.name }}</b></template>
         <template v-slot:modalBody>
@@ -88,6 +89,7 @@
         data() {
             return {
                 configs: [],
+                devices: [],
                 searchFilter: '',
                 showAddModal: false,
                 showEditModal: false,
@@ -102,9 +104,10 @@
 
                 if (this.searchFilter !== '') {
                     filterConfigs = filterConfigs.filter(config => 
-                        config.zeusHost.toLowerCase().includes(this.searchFilter) || 
-                        config.zeusUsername.toLowerCase().includes(this.searchFilter) || 
-                        config.dgaUsername.toLowerCase().includes(this.searchFilter) 
+                        config.dgaUsername.toLowerCase().includes(this.searchFilter.toLowerCase()) || 
+                        config.zeusUsername.toLowerCase().includes(this.searchFilter.toLowerCase()) || 
+                        config.zeusHost.toLowerCase().includes(this.searchFilter.toLowerCase()) 
+
                     );
                 }
 
@@ -127,11 +130,45 @@
                 this.showEditModal = true;
                 this.config_id = config;      
             },
+            async getDevices(client_id) {
+                try {
+                    const response = await axios.get(
+                        this.$store.state.backendUrl + '/devices',
+                        {
+                            params: {
+                                'client': true,
+                                'client_id': client_id
+                            },  
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: 'Bearer ' + this.$store.state.token,
+                            }
+                        }
+                    );
+                    
+                    this.devices = response.data;
+                    return this.devices; 
+                    
+                   
 
-            deleteConfig(config) {
+                } catch (error) {
+                    console.error('Error en la solicitud a la API:', error);
+                    this.ShowError = true;
+                        
+                        // this.errorMsg = "Ha ocurrido un error: " + error;
+                }
+            },
+            async deleteConfig(config) {
+                
                 this.showDeleteModal = true; 
-                this.config_id = config; 
-                console.log("CONFIG ID:",this.config_id)
+                this.config_id = config;
+                try {
+                    await this.getDevices(this.config_id.client_id);
+                    console.log("Devices config: ", this.devices);
+                }
+                catch (error) {
+                    console.error('Error al obtener dispositivos en deleteConfig button:', error);
+                }
             },
 
             handleSearch(search) {
@@ -187,8 +224,8 @@
                         // this.errorMsg = "Ha ocurrido un error: " + error;
                 }
             },
-
             
+
             onCloseAdd() {
                 this.showAddModal = false; 
                 this.getConfigs();

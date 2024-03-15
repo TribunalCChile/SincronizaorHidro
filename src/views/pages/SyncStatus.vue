@@ -8,7 +8,7 @@
         </CCol>
         <CCol class="col-3">
             <DeviceFilter 
-                :devices="devicesFilter"
+                :allDevices="devicesFilter"
                 @filter="handleDevices"
             /> 
         </CCol>
@@ -111,6 +111,7 @@
                 enabledFilter: false,
                 clientsFilter: [],
                 devicesFilter: [],
+                totalDevices: []
             }
             
         },
@@ -120,22 +121,25 @@
                 let filterTasks = [...this.statusTasks];
                 if (this.clientsFilter.length > 0) {
                     filterTasks = filterTasks.filter(task => 
-                        this.clientsFilter.includes(task.client_id) 
+                        this.clientsFilter.includes(task.client_id)
                     );
+                    console.log("Filter tasks dentro de if: ", filterTasks);
                 }
-               
-                if (this.devicesFilter.length > 0) {
+                
+                if (this.devicesFilter.length > 0 && this.devicesFilter.length < this.totalDevices.length) {
                     filterTasks = filterTasks.filter(task => 
-                        this.devicesFilter.includes(task.device_id)
+                        this.devicesFilter.includes(task.next_task.device_id)
                     )
                 }
-
+                
                 if (this.enabledFilter) {
                     filterTasks = filterTasks.filter(task =>
                         task.enabled === 1
                     );
                 }
+
                 console.log(filterTasks); 
+                
                 return filterTasks; 
             }
 
@@ -200,7 +204,7 @@
                         )
                         devices = response.data;
                     }
-
+                    this.totalDevices = devices;
                     this.devicesFilter = devices; 
                 } catch (error) {
                     console.error('Error en la solicitud a la API:', error);

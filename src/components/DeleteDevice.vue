@@ -14,15 +14,15 @@
         <CModalFooter>
             <CAlert color="danger"
                 :visible="fail">
-                Para eliminar este cliente no debe tener estaciones agregadas.
+                Para eliminar este dispositivo no debe estar habilitado. 
             </CAlert>
             <CAlert color="success"
                 :visible="success">
-                Cliente eliminado exitósamente. 
+                Dispositivo eliminado exitósamente. 
             </CAlert>
 
             <CButton 
-                @click="deleteClient"
+                @click="deleteDevice"
                 color="danger" 
                 class="text-white">Eliminar
             </CButton>
@@ -42,7 +42,7 @@
         emits: ['closeDeleteModal'],
         props: {   
             showDeleteModal: Boolean, 
-            client: Object
+            device: Object
         },
         data() {
             return {
@@ -54,17 +54,18 @@
             closeModal() {
                 this.$emit('closeDeleteModal');
                 this.fail = false;
-                this.sucess = false;
+                this.success = false;
             },
             
            
-            deleteClient() {
-                if (this.client.client_configs.length) {
+            deleteDevice() {
+                if (this.device.enabled) {
                     this.fail = true; 
-                
-                } else {
+                } 
+
+                if (!this.fail) {
                     axios.delete(
-                        this.$store.state.backendUrl+'/clients/' + this.client.id,
+                        this.$store.state.backendUrl+'/devices/' + this.devices.id,
                         {
                             headers: {
                                 "Content-Type": "application/json",
@@ -80,8 +81,7 @@
                             console.log("Error: ", error);
                             //this.errorMsg = "Ha ocurrido un error: " + error; 
                      })
-                } 
-                  
+                }  
             }
 
         }

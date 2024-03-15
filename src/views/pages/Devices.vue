@@ -73,7 +73,7 @@
     import * as icon from '@coreui/icons';
     import AddDeviceModal from '../../components/AddDevice.vue'; 
     import EditDeviceModal from '../../components/EditDevice.vue'; 
-    import DeleteDeviceModal from '../../components/DeleteModal.vue'; 
+    import DeleteDeviceModal from '../../components/DeleteDevice.vue'; 
 
     export default {
         name: "Devices",

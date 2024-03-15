@@ -35,12 +35,14 @@
 <script>
     import axios from 'axios'; 
 
+
     export default {
         name: 'DeleteModal',
         emits: ['closeDeleteModal'],
         props: {   
             showDeleteModal: Boolean, 
-            config: Object
+            config: Object,
+            devices: Array
         },
         data() {
             return {
@@ -48,7 +50,12 @@
                 success: false,
             }
         },
+
+        mounted() {
+            
+        },
         methods: {
+            
             closeModal() {
                 this.$emit('closeDeleteModal');
                 this.fail = false;
@@ -57,10 +64,17 @@
             
            
             deleteConfig() {
-                if (this.client.client_configs.length) {
-                    this.fail = true; 
+                console.log("Devices en delete config: ",this.devices); 
+                this.devices.forEach(device => {
+                    if (device.client_config_id === this.config.id) {
+                        console.log(device.client_config_id)
+                        if (device.enabled) {
+                            this.fail = true; 
+                        } 
+                    }
+                })
                 
-                } else {
+                if (!this.fail) {
                     axios.delete(
                         this.$store.state.backendUrl+'/client_configs/' + this.config.id,
                         {
@@ -79,7 +93,9 @@
                             //this.errorMsg = "Ha ocurrido un error: " + error; 
                      })
                 } 
-                  
+                
+                
+                
             }
 
         }

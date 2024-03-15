@@ -3,7 +3,7 @@
     <v-select 
         multiple
         v-model="selectedDevices" 
-        :options="devices"
+        :options="allDevices"
         @option:selected="filter"
         :reduce="device => device.id"
         label="zeusName"
@@ -17,7 +17,7 @@
     export default { 
         emits: ['filter'],
         props: {
-            devices: Array
+            allDevices: Array,
         },
         data() {
             return {
@@ -27,14 +27,13 @@
 
         },
 
-        mounted() {
-            
-        },
-
+    
         methods: {
+            
             filter(e) {
-                console.log(this.selectedDevices); 
-                this.$emit('filter',e);
+                this.$emit('filter', this.selectedDevices); 
+                console.log("SELECTED DEVICES:",this.selectedDevices); 
+                
             }
         }
     }

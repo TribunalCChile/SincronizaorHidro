@@ -42,7 +42,8 @@
         emits: ['closeDeleteModal'],
         props: {   
             showDeleteModal: Boolean, 
-            client: Object
+            client: Object,
+            devices: Array,
         },
         data() {
             return {
@@ -54,15 +55,20 @@
             closeModal() {
                 this.$emit('closeDeleteModal');
                 this.fail = false;
-                this.sucess = false;
+                this.success = false;
             },
             
            
             deleteClient() {
-                if (this.client.client_configs.length) {
-                    this.fail = true; 
-                
-                } else {
+                /* Validar que el cliente no tenga dispositivos asociados a el  */  
+                this.devices.forEach(device => {
+                    if (device.client_id === this.client.id) {
+                        console.log(device.client_id)
+                        this.fail = true; 
+                    }
+                })
+
+                if (!this.fail) { 
                     axios.delete(
                         this.$store.state.backendUrl+'/clients/' + this.client.id,
                         {
@@ -80,7 +86,9 @@
                             console.log("Error: ", error);
                             //this.errorMsg = "Ha ocurrido un error: " + error; 
                      })
-                } 
+                }
+              
+               
                   
             }
 

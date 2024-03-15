@@ -8,7 +8,7 @@
         </CCol>
         <CCol class="col-3">
             <DeviceFilter 
-                :devices="devicesFilter"
+                :allDevices="devicesFilter"
                 @filter="handleDevices"
             /> 
         </CCol>
@@ -78,18 +78,25 @@
                 searchFilter: '',
                 clientsFilter: [],
                 devicesFilter: [],
+                totalDevices: [],
+                
             }
             
         },
 
         computed: {
             filteredTasks() {
-                let filterTasks = this.failTasks; 
-                console.log(filterTasks);  
+                let filterTasks = this.failTasks;   
                 if (this.clientsFilter.length > 0) {
                     filterTasks = filterTasks.filter(task => 
                         this.clientsFilter.includes(task.last_error.client_id) 
                     );
+                }
+                if (this.devicesFilter.length > 0 && this.devicesFilter.length < this.totalDevices.length) {
+                    console.log("DEVICES FILTER EN FILTERED TASKS: ", this.devicesFilter)
+                    filterTasks = filterTasks.filter(task => 
+                        this.devicesFilter.includes(task.last_error.device_id)
+                    )
                 }
 
                 return filterTasks; 
@@ -117,9 +124,7 @@
                 console.log("DEVICES: ",options); 
             }, 
 
-            handleDevices(devices) {
-                this.devicesFilter = devices; 
-            },
+            
 
             async getFailedTasks() {
                 const response = await axios.get(
@@ -161,8 +166,9 @@
                             host: config.client_config.zeusHost
                         }))); 
                     }
-
+                    this.totalDevices = devices; 
                     this.devicesFilter = devices; 
+                    
                 } catch (error) {
                     
                     console.error('Error en la solicitud a la API:', error);

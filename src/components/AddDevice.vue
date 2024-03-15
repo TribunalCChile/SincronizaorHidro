@@ -247,7 +247,9 @@
             }
         },
         methods: {
-           
+            getCodesConfig() {
+                return; 
+            },
             setTouched(theModel) { 
                 if(theModel == 'client_id' || theModel == 'all' )
                 {this.v$.form.client_id.$touch()}

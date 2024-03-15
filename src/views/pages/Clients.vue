@@ -46,6 +46,7 @@
         :showDeleteModal="showDeleteModal"
         @closeDeleteModal="onCloseDeleteModal"
         :client="client_id"
+        :devices="devices"
     >
         <template v-slot:modalTitle>Eliminar Cliente: <b>{{ client_id.name }}</b></template>
         <template v-slot:modalBody>
@@ -84,6 +85,7 @@
         data() {
             return {
                 clients: [],
+                devices: [],
                 searchFilter: '',
                 showAddModal: false,
                 showEditModal: false,
@@ -117,9 +119,16 @@
                 this.showEditModal = true; 
                 this.client_id = client; 
             },
-            deleteClient(client) {
+            async deleteClient(client) {
                 this.showDeleteModal = true; 
-                this.client_id = client; 
+                this.client_id = client;
+                try {
+                    await this.getDevices(this.client_id.id);
+                    console.log("Devices client: ", this.devices);
+                }
+                catch (error) {
+                    console.error('Error al obtener dispositivos en deleteClient button:', error);
+                }
             },
 
             addClient() {
@@ -128,7 +137,34 @@
             handleSearch(search) {
                 this.searchFilter = search; 
             },
+            async getDevices(client_id) {
+                try {
+                    const response = await axios.get(
+                        this.$store.state.backendUrl + '/devices',
+                        {
+                            params: {
+                                'client': true,
+                                'client_id': client_id
+                            },  
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: 'Bearer ' + this.$store.state.token,
+                            }
+                        }
+                    );
+                    
+                    this.devices = response.data;
+                    return this.devices; 
+                    console.log("DEVICES GETDEVICES: ", this.devices);
+                   
 
+                } catch (error) {
+                    console.error('Error en la solicitud a la API:', error);
+                    this.ShowError = true;
+                        
+                        // this.errorMsg = "Ha ocurrido un error: " + error;
+                }
+            },
             async getClients() {
                 try {
                     const response = await axios.get(
