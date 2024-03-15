@@ -19,7 +19,7 @@
         </CCol>
         <CCol class="col-3">
             <DeviceFilter 
-                :devices="devicesFilter"
+                :allDevices="devicesFilter"
                 @filter="handleDevices"
             /> 
         </CCol>

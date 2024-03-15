@@ -108,9 +108,10 @@
 
                 if (this.searchFilter !== '') {
                     filterDevices = filterDevices.filter(devices => 
-                        devices.zeusName.toLowerCase().includes(this.searchFilter) || 
-                        devices.zeusCode.toLowerCase().includes(this.searchFilter) || 
-                        devices.dgaCode.toLowerCase().includes(this.searchFilter) 
+                        devices.zeusName.toLowerCase().includes(this.searchFilter.toLowerCase()) || 
+                        devices.zeusCode.toLowerCase().includes(this.searchFilter.toLowerCase()) || 
+                        devices.dgaCode.toLowerCase().includes(this.searchFilter.toLowerCase()) || 
+                        devices.client.name.toLowerCase().includes(this.searchFilter.toLowerCase())
                     );
                 }
 
